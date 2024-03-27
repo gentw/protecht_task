@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Sale;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,7 +13,7 @@ use App\Models\Sale;
 */
 
 Route::get('/', function () {
-    return "Hello World";
+    return redirect('/login');
 });
 
-
+Auth::routes();

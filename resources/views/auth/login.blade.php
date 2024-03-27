@@ -35,10 +35,10 @@
                         <div class="card mb-0">
                             <div class="card-body">
                                 <a href="/" class="brand-logo">
-                                    <h3>PLUS</h3>
+                                    <h3>Protecht</h3>
                                 </a>
-                                <h4 class="card-title mb-1">PLUS</h4>
-                                <p class="card-text mb-2">Kyqu ne llogarine tuaj te PLUS</p>
+                                <h4 class="card-title mb-1">Protecht</h4>
+                                <p class="card-text mb-2">Kyqu ne llogarine tuaj te Protecht</p>
                                 <form class="auth-login-form mt-2" method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="mb-1">
@@ -58,6 +58,9 @@
                                                 </span>
                                             @enderror
                                         </div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <p>Nese nuk keni llogari, <a href="/register">kliko ketu te regjistroheni</a></p>
                                     </div>
                                     <button class="btn btn-primary w-100" tabindex="4">Kyqu</button>
                                 

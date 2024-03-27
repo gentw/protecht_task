@@ -32,7 +32,7 @@
 
 <body>
   <noscript>
-    <strong>We're sorry but Bluesky doesn't work properly without
+    <strong>We're sorry but Protecht doesn't work properly without
       JavaScript enabled. Please enable it to continue.</strong>
   </noscript>
   <div id="loading-bg">
