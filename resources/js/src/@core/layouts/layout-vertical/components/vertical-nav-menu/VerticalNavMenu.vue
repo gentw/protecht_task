@@ -25,7 +25,7 @@
               to="/"
             >
               <span class="brand-logo">
-               <h3>PLUS</h3>
+               <h3>Protecht</h3>
               </span>
             </b-link>
           </li>
@@ -66,7 +66,7 @@
       @ps-scroll-y="evt => { shallShadowBottom = evt.srcElement.scrollTop > 0 }"
     >
       <vertical-nav-menu-items
-        :items="(currentUserIsAdmin) ? adminMenuItems : empMenuItems"
+        :items="menu"
         class="navigation navigation-main"
       />
     </vue-perfect-scrollbar>
@@ -77,8 +77,8 @@
 <script>
 //1
 import store from '@/store'
-import adminMenuItems from '@/navigation/vertical/admin_menu'
-import empMenuItems from '@/navigation/vertical/emp_menu'
+// import adminMenuItems from '@/navigation/vertical/admin_menu'
+import menu from '@/navigation/vertical/menu'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import { BLink, BImg } from 'bootstrap-vue'
 import { provide, computed, ref, onUnmounted, onMounted, nextTick } from '@vue/composition-api'
@@ -86,8 +86,8 @@ import useAppConfig from '@core/app-config/useAppConfig'
 import { $themeConfig } from '@themeConfig'
 import VerticalNavMenuItems from './components/vertical-nav-menu-items/VerticalNavMenuItems.vue'
 import useVerticalNavMenu from './useVerticalNavMenu'
-import useUsersList from '@/views/user/users-list/useUsersList'
-import userStoreModule from '@/views/user/userStoreModule'
+// import useUsersList from '@/views/user/users-list/useUsersList'
+// import userStoreModule from '@/views/user/userStoreModule'
 
 export default {
   components: {
@@ -115,17 +115,13 @@ export default {
       updateMouseHovered,
     } = useVerticalNavMenu(props)
 
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
+    // const USER_APP_STORE_MODULE_NAME = 'app-user'
 
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
+    // if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
 
-    const {
-        userIsAdmin,
-        isAdmin,
-        
-      } = useUsersList()
+  
 
-    const currentUserIsAdmin = computed(() => isAdmin.value);
+    // const currentUserIsAdmin = computed(() => isAdmin.value);
 
     const { skin } = useAppConfig()
 
@@ -145,12 +141,11 @@ export default {
     const { appName, appLogoImage } = $themeConfig.app
 
     onMounted(() => {
-      userIsAdmin();       
+      // userIsAdmin();       
     });
 
     return {
-      adminMenuItems,
-      empMenuItems,
+      menu,
       perfectScrollbarSettings,
       isVerticalMenuCollapsed,
       collapseTogglerIcon,
@@ -168,10 +163,8 @@ export default {
       // App Name
       appName,
       appLogoImage,
-      userIsAdmin,
-      isAdmin,
-      currentUserIsAdmin
-    }
+    
+          }
   },
 }
 </script>

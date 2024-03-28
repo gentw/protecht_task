@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +15,22 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect('/login');
+});
+
+Route::get('/home', [App\Http\Controllers\ProductController::class, 'index'])->name('home');
+
+Route::get('/web/{any}', function () {
+    return view('app');
+})->where('any', '.*')->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+    Route::prefix('api')->group(function () {
+        Route::post('addProduct', [ProductController::class, 'addProduct']);
+        Route::put('update/{id}', [ProductController::class, 'update']);
+        Route::get('view/{id}', [ProductController::class, 'view']);
+        Route::delete('deleteUser/{id}', [ProductController::class, 'deleteUser']);
+        Route::post('fetchProducts', [ProductController::class, 'fetchProducts']);
+    });
 });
 
 Auth::routes();
