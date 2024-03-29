@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
         Route::put('update/{id}', [ProductController::class, 'update']);
         Route::get('view/{id}', [ProductController::class, 'view']);
         Route::delete('deleteUser/{id}', [ProductController::class, 'deleteUser']);
-        Route::post('fetchProducts', [ProductController::class, 'fetchProducts']);
+        Route::get('fetchProducts', [ProductController::class, 'fetchProducts']);
     });
 });
 

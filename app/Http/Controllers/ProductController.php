@@ -78,9 +78,20 @@ class ProductController extends Controller
 
     public function fetchProducts(Request $request)
     {
+        $perPage = $request['perPage'];
+        $page = $request['page'];
+        $sortBy = $request['sortBy'];
+        $sortDesc = $request['sortDesc']; 
+
         $products = Product::orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
                     ->paginate($perPage, ['*'], 'page', $page); 
 
-        return response()->json($products);
+        $total_rows = $products->total();
+        $products = $products->items();
+
+        return response()->json([
+            "products" => $products,
+            "total" => $total_rows,
+        ]);
     }
 }

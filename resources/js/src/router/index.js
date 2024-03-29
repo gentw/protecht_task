@@ -11,7 +11,20 @@ const router = new VueRouter({
   },
   routes: [
     
-    
+    {
+      path: '/web/home',
+      name: 'home',
+      component: () => import('@/views/Home.vue'),
+      meta: {
+        pageTitle: 'Paneli',
+        breadcrumb: [
+          {
+            text: 'Paneli',
+            active: true,
+          },
+        ],
+      },
+    },
     
   ],
 })
