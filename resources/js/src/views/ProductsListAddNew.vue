@@ -1,7 +1,7 @@
 <template>
     <b-sidebar
-      id="add-new-user-sidebar"
-      :visible="isAddNewUserSidebarActive"
+      id="add-new-product-sidebar"
+      :visible="isAddNewProductSidebarActive"
       bg-variant="white"
       sidebar-class="sidebar-lg"
       shadow
@@ -9,13 +9,13 @@
       no-header
       right
       @hidden="resetForm"
-      @change="(val) => $emit('update:is-add-new-user-sidebar-active', val)"
+      @change="(val) => $emit('update:is-add-new-product-sidebar-active', val)"
     >
       <template #default="{ hide }">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
           <h5 class="mb-0">
-            Shto perdorues te ri
+            Shto produkt te ri
           </h5>
   
           <feather-icon
@@ -39,32 +39,7 @@
             @reset.prevent="resetForm"
           >
   
-          <!-- User Role -->
-          <validation-provider
-              #default="validationContext"
-              name="Role"
-              rules="required"
-              
-              v-if="currentUserIsAdmin"
-            >
-              <b-form-group
-                label="Roli perdoruesit"
-                label-for="user-role"
-                :state="getValidationState(validationContext)"
-              >
-                <v-select
-                  v-model="userData.role"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="roleOptions"
-                  :reduce="val => val.value"
-                  :clearable="false"
-                  input-id="role"
-                />
-                <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                  {{ validationContext.errors[0] }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </validation-provider>
+        
   
             <!-- Full Name -->
             <validation-provider
@@ -78,11 +53,11 @@
               >
                 <b-form-input
                   id="name"
-                  v-model="userData.name"
+                  v-model="productData.name"
                   autofocus
                   :state="getValidationState(validationContext)"
                   trim
-                  placeholder="Muse Gjergjaj"
+                  placeholder="Product"
                 />
   
                 <b-form-invalid-feedback>
@@ -95,17 +70,16 @@
             <!-- Email -->
             <validation-provider
               #default="validationContext"
-              name="Email"
-              rules="required|email"
-              v-if="userData.role != 3 && currentUserIsAdmin"
+              name="Cmimi"
+              rules="required|doublerequired"
             >
               <b-form-group
-                label="Email"
-                label-for="email"
+                label="Cmimi"
+                label-for="price"
               >
                 <b-form-input
-                  id="email"
-                  v-model="userData.email"
+                  id="price"
+                  v-model="productData.price"
                   :state="getValidationState(validationContext)"
                   trim
                 />
@@ -116,29 +90,7 @@
               </b-form-group>
             </validation-provider>
   
-            <!-- Email -->
-            <validation-provider v-if="userData.role != 3 && currentUserIsAdmin"
-              #default="validationContext"
-              name="password"
-              rules="required|password"
-            >
-              <b-form-group
-                label="Password"
-                label-for="password"
-              >
-                <b-form-input
-                  id="password"
-                  type="password"
-                  v-model="userData.password"
-                  :state="getValidationState(validationContext)"
-                  trim
-                />
-  
-                <b-form-invalid-feedback>
-                  {{ validationContext.errors[0] }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-            </validation-provider>
+           
   
           
   
@@ -170,8 +122,8 @@
   
   <script>
   import { BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton } from 'bootstrap-vue'
-  import { ValidationProvider, ValidationObserver } from 'vee-validate'
-  import { ref } from '@vue/composition-api'
+  import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+  import { onMounted, ref, watch, nextTick } from '@vue/composition-api'
   import { required, alphaNum, email } from '@validations'
   import formValidation from '@core/comp-functions/forms/form-validation'
   import Ripple from 'vue-ripple-directive'
@@ -196,26 +148,15 @@
       Ripple,
     },
     model: {
-      prop: 'isAddNewUserSidebarActive',
-      event: 'update:is-add-new-user-sidebar-active',
+      prop: 'isAddNewProductSidebarActive',
+      event: 'update:is-add-new-product-sidebar-active',
     },
     props: {
-      isAddNewUserSidebarActive: {
+      isAddNewProductSidebarActive: {
         type: Boolean,
         required: true,
       },
-      roleOptions: {
-        type: Array,
-        required: true,
-      },
-      planOptions: {
-        type: Array,
-        required: true,
-      },
-      currentUserIsAdmin: {
-        type: Boolean,
-        required: true
-      }
+    
     },
     data() {
       return {
@@ -225,29 +166,36 @@
       }
     },
     setup(props, { emit }) {
-      const blankUserData = {
+      const blankProductData = {
         name: '',
-        email: '',
-        role: '',
-        password: ''
+        price: ''
       }
+
+      extend('doublerequired', {
+      validate: (value) => {
+        const regex = /^\d+(\.\d{1,2})?$/;
+        return regex.test(value);
+      },
+      message: 'Cmimi i shkruar nuk lejohet (shembujt e lejuar: 50 ose 50.25)!',
+      
+    });
   
-      const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
-      const resetuserData = () => {
-        userData.value = JSON.parse(JSON.stringify(blankUserData))
+      const productData = ref(JSON.parse(JSON.stringify(blankProductData)))
+      const resetProductData = () => {
+        productData.value = JSON.parse(JSON.stringify(blankProductData))
       }
   
       const onSubmit = () => {
-        store.dispatch('app-product/addProduct', userData.value).then(() => {
+        store.dispatch('app-product/addProduct', productData.value).then(() => {
           emit('refetch-data')
           emit('update:is-add-new-product-sidebar-active', false)
         })
       }
   
-      const { refFormObserver, getValidationState, resetForm } = formValidation(resetuserData)
+      const { refFormObserver, getValidationState, resetForm } = formValidation(resetProductData)
   
       return {
-        userData,
+        productData,
         onSubmit,
   
         refFormObserver,

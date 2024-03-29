@@ -22,23 +22,23 @@ class ProductController extends Controller
         return view('home');
     }
 
-    public function add(Request $request)
+    public function addProduct(Request $request)
     {   
+
         $validatedData = $request->validate([
-            'product.name' => 'required|string',
-            'product.price' => 'required|numeric',
+            'name' => 'required|string',
+            'price' => 'required|numeric',
         ]);
 
         $product = Product::create([
-            "name" => $validatedData['product']['name'],
-            "price" => $validatedData['product']['price']
+            "name" => $validatedData['name'],
+            "price" => $validatedData['price']
         ]);
 
         return response()->json(['message' => 'Product added successfully', 'product' => $product]);
     }
 
-    public function update($id, Request $request)
-    {   
+    public function update($id, Request $request){
         $product = Product::find($id);
 
         if (!$product) {
@@ -46,14 +46,14 @@ class ProductController extends Controller
         }
 
         $product->update([
-            "name" => $request->input('product.name'),
-            "price" => $request->input('product.price')
+            "name" => $request->input('name'),
+            "price" => $request->input('price')
         ]);
 
-        return response()->json(['message' => 'Product updated successfully']);
+        return response()->json('success');
     }
 
-    public function view($id)
+    public function viewProduct($id)
     {
         $product = Product::find($id);
 
@@ -63,7 +63,7 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function delete($id)
+    public function deleteProduct($id)
     {
         $product = Product::find($id);
 
@@ -73,7 +73,7 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return response()->json(['message' => 'Product deleted successfully']);
+        return response()->json('success');
     }
 
     public function fetchProducts(Request $request)

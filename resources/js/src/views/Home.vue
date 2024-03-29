@@ -1,12 +1,17 @@
 <<template>
 
     <div>
+
+      <products-list-edit
+      :is-products-list-edit-sidebar-active.sync="isProductsListEditSidebarActive"
+      :product-data="productDatas"
+      @refetch-data="refetchData"
+    />
   
-  
-      <!-- <products-list-add-new
-        :is-add-new-user-sidebar-active.sync="isAddNewProductSidebarActive"
+      <products-list-add-new
+        :is-add-new-product-sidebar-active.sync="isAddNewProductSidebarActive"
         @refetch-data="refetchData"
-      /> -->
+      />
   
     
       <!-- Table Container Card -->
@@ -139,20 +144,16 @@
                   class="align-middle text-body"
                 />
               </template>
-              <!-- <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
-                <feather-icon icon="FileTextIcon" />
-                <span class="align-middle ml-50">Detajet</span>
-              </b-dropdown-item>
-  
-              <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
+            
+              <b-dropdown-item @click="showEditSidebar(data.item.id)">
                 <feather-icon icon="EditIcon" />
                 <span class="align-middle ml-50">Ndrysho</span>
-              </b-dropdown-item> -->
+              </b-dropdown-item> 
   
-              <!-- <b-dropdown-item @click="deleteProduct(data.item.id)">
+              <b-dropdown-item @click="deleteProduct(data.item.id)">
                 <feather-icon icon="TrashIcon" />
                 <span class="align-middle ml-50">Fshije</span>
-              </b-dropdown-item> -->
+              </b-dropdown-item>
             </b-dropdown>
           </template>
   
@@ -229,7 +230,7 @@
   import useProductsList from './useProductsList'
   import productStoreModule from './productStoreModule'
   import ProductsListAddNew from './ProductsListAddNew.vue'
-  
+  import ProductsListEdit from './ProductsListEdit.vue'
   export default {
     components: {
       ProductsListAddNew,
@@ -247,7 +248,7 @@
       BDropdown,
       BDropdownItem,
       BPagination,
-  
+      ProductsListEdit,
       vSelect,
     },
     setup() {
@@ -269,7 +270,7 @@
       
   
       const isAddNewProductSidebarActive = ref(false)
-  
+      const isProductsListEditSidebarActive = ref(false);
      
       const {
         fetchProducts,
@@ -289,14 +290,22 @@
       
   
         // Extra Filters
-      
-        deleteProduct
+        fetchProduct,
+        deleteProduct,
+        productDatas
         
       } = useProductsList()
-  
+      
+      const showEditSidebar = ((id) => {
+        // alert(id);
+        isProductsListEditSidebarActive.value = true;
+        fetchProduct(id);
+      });
+
       return {
         // Sidebar
         isAddNewProductSidebarActive,
+        isProductsListEditSidebarActive,
   
         fetchProducts,
       
@@ -314,7 +323,10 @@
   
         // Filter
         avatarText,
-        deleteProduct
+        deleteProduct,
+        showEditSidebar,
+        productDatas
+        
       }
     },
   }

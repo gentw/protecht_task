@@ -5,11 +5,6 @@ export default [
     icon: 'HomeIcon',
   },
   
-  {
-    title: 'Produktet',
-    route: 'products',
-    icon: 'ShoppingBagIcon',
-  },
 
 
 ]

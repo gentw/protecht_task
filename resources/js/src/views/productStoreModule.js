@@ -14,36 +14,37 @@ export default {
           .catch(error => reject(error))
       })
     },
-    fetchProduct(ctx, { id }) {
+    viewProduct(ctx, id) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/fetchUser/${id}`)
+          .get(`/api/viewProduct/${id}`)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })
-    },
-    addProduct(ctx, userData) {
+    }, 
+    addProduct(ctx, productData) {
       return new Promise((resolve, reject) => {
         axios
-          .post('/api/addProduct', { user: userData })
+          .post('/api/addProduct', productData)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })
     },
 
-    updateProduct(ctx, userData) {
-        return new Promise((resolve, reject) => {
-          axios
-            .post('/api/addUser', { user: userData })
-            .then(response => resolve(response))
-            .catch(error => reject(error))
-        })
-      },
+    updateProduct(ctx, productData) {
+      return new Promise((resolve, reject) => {
+        axios
+          .put(`/api/updateProduct/${productData.id}`, productData)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+
 
     deleteProduct(ctx, id) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/delete/${id}`)
+          .get(`/api/deleteProduct/${id}`)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

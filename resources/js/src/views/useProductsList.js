@@ -25,6 +25,7 @@ export default function useProductsList() {
   const searchQuery = ref('')
   const sortBy = ref('id')
   const isSortDirDesc = ref(true)
+  const productDatas = ref({});
 
   const dataMeta = computed(() => {
     const localItemsCount = refProductListTable.value ? refProductListTable.value.localItems.length : 0
@@ -36,7 +37,6 @@ export default function useProductsList() {
   })
 
   const refetchData = () => {
-    alert(1)
     refProductListTable.value.refresh()
   }
 
@@ -73,8 +73,15 @@ export default function useProductsList() {
       })
   }
 
+  const fetchProduct = (id) => {
+    store.dispatch('app-product/viewProduct', id).then((response) => {
+      productDatas.value = response.data;
+    });
+  }
+
+
   const deleteProduct = (id) => {
-    store.dispatch('app-user/deleteUser', id).then(() => {
+    store.dispatch('app-product/deleteProduct', id).then(() => {
       refetchData() 
     }).then(response => {
       toast({
@@ -120,9 +127,11 @@ export default function useProductsList() {
     isSortDirDesc,
     refProductListTable,
     refetchData,
+    productDatas,
+    fetchProduct,
 
     // Extra Filters
-  
+    
     deleteProduct
   }
 }

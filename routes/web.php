@@ -26,9 +26,9 @@ Route::get('/web/{any}', function () {
 Route::middleware('auth')->group(function () {
     Route::prefix('api')->group(function () {
         Route::post('addProduct', [ProductController::class, 'addProduct']);
-        Route::put('update/{id}', [ProductController::class, 'update']);
-        Route::get('view/{id}', [ProductController::class, 'view']);
-        Route::delete('deleteUser/{id}', [ProductController::class, 'deleteUser']);
+        Route::put('updateProduct/{id}', [ProductController::class, 'update']);
+        Route::get('viewProduct/{id}', [ProductController::class, 'viewProduct']);
+        Route::get('deleteProduct/{id}', [ProductController::class, 'deleteProduct']);
         Route::get('fetchProducts', [ProductController::class, 'fetchProducts']);
     });
 });
